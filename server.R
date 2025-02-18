@@ -53,44 +53,18 @@ function(input, output, session) {
   })
 
   #### Uploads ####
-  # Vérification des formats
-  sessions <- reactive({
+  ## Importation ##
+  fichiers_bruts_apres_importation <- reactive({
     req(input$upload_fichiers)
-    # 
-    # ext <- tools::file_ext(input$upload_fichiers$name)
-    # switch(ext,
-    #        csv = input$upload$datapath %>% map_dfr(chronique.ouverture, Type = "Mesures", typemesure = "Piézométrie", skipvalue = 1, nbcolonnes = 3, separateur_colonnes = ";", separateur_decimales = ".", typefichier = ".csv", typedate = "dmy_hms", typecapteur = "Hobo", nomfichier = T),
-    #        txt = input$upload$datapath %>% map_dfr(chronique.ouverture, Type = "Mesures", typemesure = "Piézométrie", skipvalue = 1, nbcolonnes = 3, separateur_colonnes = ";", separateur_decimales = ".", typefichier = ".csv", typedate = "dmy_hms", typecapteur = "Hobo", nomfichier = T),
-    #        validate("Fichier invalide - Merci de charger un fichier .csv ou .txt")
-    # )
-    
-    ## Renommage des fichiers avec leur nom original, car ils sont stockés localement avec un nom aléatoire
-    # from <- input$upload_fichiers$datapath
-    # to <- file.path(dirname(from), basename(input$upload_fichiers$name))
-    # file.rename(from, to)
-    
-    # from <- input$upload_fichiers[['datapath']]
-    # to <- file.path(dirname(from), basename(input$upload_fichiers[['name']]))
-    # file.rename(from, to)
-    
-    input$upload_fichiers %>% 
-      fixUploadedFilesNames() %>% 
+    input$upload_fichiers %>%
+      fixUploadedFilesNames() %>%
       select(datapath) %>% 
-    # input$upload_fichiers$datapath %>% 
+      pull() %>% 
       map_dfr(chronique.ouverture, Type = "Mesures", typemesure = "Piézométrie", skipvalue = 1, nbcolonnes = 3, separateur_colonnes = ";", separateur_decimales = ".", typefichier = ".csv", typedate = "dmy_hms", typecapteur = "Hobo", nomfichier = T)
-           # txt = input$upload$datapath %>% map_dfr(chronique.ouverture, Type = "Mesures", typemesure = "Piézométrie", skipvalue = 1, nbcolonnes = 3, separateur_colonnes = ";", separateur_decimales = ".", typefichier = ".csv", typedate = "dmy_hms", typecapteur = "Hobo", nomfichier = T),
-           # validate("Fichier invalide - Merci de charger un fichier .csv ou .txt")
-    # )
   })
-  
-  # output$files <- DT::renderDT({
-  # output$files <- renderTable({
-  #   req(input$upload_fichiers)
-  #   # DT::datatable(sessions(), selection = c("single"))
-  #   sessions()
-  # })
-  
-  output$files <- render_gt(expr = sessions())
+
+  output$fichiers_bruts_apres_importation <- render_gt(fichiers_bruts_apres_importation())
+  output$files <- render_gt(fichiers_bruts_apres_importation() %>% distinct(nom_fichier))
   
   #### Données initiales ####
   

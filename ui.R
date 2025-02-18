@@ -51,7 +51,8 @@ ui <- dashboardPage(
                 # ),
               ), # Fin de fluidRow
                 # DT::DTOutput("files")
-                tableOutput("files")
+                tableOutput("files"),
+                tableOutput("fichiers_bruts_apres_importation")
               ## Configuration ##
               # uiOutput("affichage_plafond_quotidien"),
               # uiOutput("affichage_md_question"),
@@ -105,7 +106,7 @@ ui <- dashboardPage(
     fluidRow( # à rétablir mais fait planter l'application sans que je ne sache pourquoi
       column(
         width = 12,
-        h5(tagList("Version 0.0.1 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
+        h5(tagList("Version 0.0.2 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
 
       ) # Fermeture de column
     ) # Fermeture de fluidRow
