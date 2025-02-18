@@ -1,4 +1,7 @@
 
+### 0.0.6 - 2025-02-18
+- Ajout d'un bouton de téléchargement des résultats
+
 ### 0.0.5 - 2025-02-18
 - Ajout d'un onglet de notice
 

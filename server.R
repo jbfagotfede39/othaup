@@ -27,6 +27,11 @@ library(purrr)
 library(shiny)
 library(stringr)
 # library(tibble)
+downloadButton <- function(...) {
+  tag <- shiny::downloadButton(...)
+  tag$attribs$download <- NULL
+  tag
+}
 
 # Define server logic required to draw a histogram
 function(input, output, session) {
@@ -95,6 +100,16 @@ function(input, output, session) {
   output$files <- render_gt(fichiers_bruts_apres_importation() %>% distinct(nom_fichier))
   output$fichiers_bruts_apres_importation_contexte <- render_gt(fichiers_bruts_apres_importation_contexte())
   output$fichiers_propres_apres_importation_contexte <- render_gt(fichiers_propres_apres_importation_contexte())
+  
+  #### Téléchargement ####
+  output$download_data <- downloadHandler(
+    filename = function(){
+      glue("{format(now(), format='%Y-%m-%d_%H:%M:%S')}_{fichiers_propres_apres_importation_contexte()$station}_{fichiers_propres_apres_importation_contexte()$annee}.csv") %>% str_replace_all(";", "-")
+    },
+    content = function(file) {
+      write_csv2(fichiers_propres_apres_importation(), file)
+    }
+  )
   
   
 }
