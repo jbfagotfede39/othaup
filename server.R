@@ -60,7 +60,7 @@ function(input, output, session) {
       fixUploadedFilesNames() %>%
       select(datapath) %>% 
       pull() %>% 
-      map_dfr(chronique.ouverture, Type = "Mesures", typemesure = "Piézométrie", skipvalue = 1, nbcolonnes = 3, separateur_colonnes = ";", separateur_decimales = ".", typefichier = ".csv", typedate = "dmy_hms", typecapteur = "Hobo", nomfichier = T)
+      map_dfr(chronique.ouverture, Type = input$param_ouverture_piezo_type, typemesure = input$param_ouverture_piezo_typemesure, skipvalue = input$param_ouverture_piezo_skipvalue, nbcolonnes = input$param_ouverture_piezo_nbcolonnes, separateur_colonnes = input$param_ouverture_piezo_separateur_colonnes, separateur_decimales = input$param_ouverture_piezo_separateur_decimales, typefichier = ".csv", typedate = input$param_ouverture_piezo_typedate, typecapteur = "Hobo", nomfichier = T)
   })
 
   #### Nettoyage ####

@@ -1,4 +1,7 @@
 
+### 0.0.4 - 2025-02-18
+- Utilisation fonctionnelle des boutons de réglages de l'importation (close #3)
+
 ### 0.0.3 - 2025-02-18
 - Nettoyage du code inutilisé de l'UI
 - Extraction du nom de la station à partir du nom du fichier

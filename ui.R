@@ -78,7 +78,7 @@ ui <- dashboardPage(
     fluidRow( # à rétablir mais fait planter l'application sans que je ne sache pourquoi
       column(
         width = 12,
-        h5(tagList("Version 0.0.3 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
+        h5(tagList("Version 0.0.4 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
 
       ) # Fermeture de column
     ) # Fermeture de fluidRow
