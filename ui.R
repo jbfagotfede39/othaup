@@ -42,41 +42,15 @@ ui <- dashboardPage(
                                      placeholder = "Aucun fichier sélectionné")
                        )
                 )
-                # column(width = 6,
-                #        box(width = NULL,
-                #            fileInput("upload_captures", "Chargement des captures", accept = c(".csv", ".geojson"),
-                #                      buttonLabel = "Sélectionner...",
-                #                      placeholder = "Aucun fichier sélectionné")
-                #        )
-                # ),
               ), # Fin de fluidRow
-                # DT::DTOutput("files")
+                tableOutput("fichiers_bruts_apres_importation_contexte"),
+                tableOutput("fichiers_propres_apres_importation_contexte"),
                 tableOutput("files"),
-                tableOutput("fichiers_bruts_apres_importation")
-              ## Configuration ##
-              # uiOutput("affichage_plafond_quotidien"),
-              # uiOutput("affichage_md_question"),
-              # uiOutput("affichage_reponse"),
-              # uiOutput("widget_affichage_reponse"),
-              # uiOutput("affichage_md_reponse"),
-              # fluidRow(
-                # column(3, uiOutput("affichage_enregistrement_rep_0")),
-                # column(3, uiOutput("affichage_enregistrement_rep_1")),
-                # column(3, uiOutput("affichage_enregistrement_rep_2"))
-                # actionButton("enregistrement_rep_0", "Black-out"),
-                # actionButton("enregistrement_rep_1", "Faux, qq souvenirs"),
-                # actionButton("enregistrement_rep_2", "Faux, facile à se rappeler")
-                # ),
-              # fluidRow(
-                # column(3, uiOutput("affichage_enregistrement_rep_3")),
-                # column(3, uiOutput("affichage_enregistrement_rep_4")),
-                # column(3, uiOutput("affichage_enregistrement_rep_5"))
-                # actionButton("enregistrement_rep_3", "Correct, mais difficile"),
-                # actionButton("enregistrement_rep_4", "Correct après hésitation"),
-                # actionButton("enregistrement_rep_5", "Parfait")
-                # ),
-              # uiOutput("affichage_validation_reponse")
+                tableOutput("fichiers_bruts_apres_importation"),
+                tableOutput("fichiers_propres_apres_importation"),
+                tableOutput("fichiers_propres_apres_importation_test")
       ), # Fin de tabItem
+              ## Configuration ##
       tabItem("tab_othaup_sub_configuration",
               ## Titre ##
               titlePanel("OTHAUP - Configuration"),
@@ -97,8 +71,6 @@ ui <- dashboardPage(
               tabItem("tab_othaup_sub_apropos", 
                       titlePanel("OTHAUP - À propos"),
                       includeMarkdown("NEWS.md")
-                      # uiOutput("affichage_md_question"),
-                      # uiOutput("affichage_md_reponse")
               ) # Fin de tabItem
       ), # fin de tabItems
       
@@ -106,7 +78,7 @@ ui <- dashboardPage(
     fluidRow( # à rétablir mais fait planter l'application sans que je ne sache pourquoi
       column(
         width = 12,
-        h5(tagList("Version 0.0.2 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
+        h5(tagList("Version 0.0.3 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
 
       ) # Fermeture de column
     ) # Fermeture de fluidRow
