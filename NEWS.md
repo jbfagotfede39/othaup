@@ -1,4 +1,7 @@
 
+### 0.0.5 - 2025-02-18
+- Ajout d'un onglet de notice
+
 ### 0.0.4 - 2025-02-18
 - Utilisation fonctionnelle des boutons de réglages de l'importation (close #3)
 

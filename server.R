@@ -46,6 +46,9 @@ function(input, output, session) {
       menuItem('Configuration',
                tabName = 'tab_othaup_sub_configuration',
                icon = icon('wrench')),
+      menuItem('Notice',
+               tabName = 'tab_othaup_sub_notice',
+               icon = icon('book-open-reader')),
       menuItem('À propos',
                tabName = 'tab_othaup_sub_apropos',
                icon = icon('info-circle'))

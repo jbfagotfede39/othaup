@@ -67,6 +67,10 @@ ui <- dashboardPage(
                 fluidRow(
                   column(width = 3, selectInput("param_ouverture_piezo_typedate", label = "Format de date", list("dmy_hms" = "dmy_hms", "ymd_hms" = "ymd_hms")))
                 ) # Fermeture de fluidRow
+              ), # Fin de tabItem              ## Notice ##
+              tabItem("tab_othaup_sub_notice",
+                titlePanel("OTHAUP - Notice d'utilisation"),
+                includeMarkdown("REFS.md")
               ), # Fin de tabItem
               tabItem("tab_othaup_sub_apropos", 
                       titlePanel("OTHAUP - À propos"),
@@ -78,7 +82,7 @@ ui <- dashboardPage(
     fluidRow( # à rétablir mais fait planter l'application sans que je ne sache pourquoi
       column(
         width = 12,
-        h5(tagList("Version 0.0.4 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
+        h5(tagList("Version 0.0.5 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
 
       ) # Fermeture de column
     ) # Fermeture de fluidRow
