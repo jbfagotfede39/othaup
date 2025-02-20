@@ -1,4 +1,9 @@
 
+### 0.0.7 - 2025-02-20
+- Ajout des boutons de réglage de la compensation barométrique
+- Implémentation du calcul de compensation
+- Distinction d'un bouton de téléchargement au format long et d'un autre au format large
+
 ### 0.0.6 - 2025-02-18
 - Ajout d'un bouton de téléchargement des résultats
 

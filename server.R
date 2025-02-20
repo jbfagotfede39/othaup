@@ -20,13 +20,15 @@ library(lubridate)
 library(magrittr)
 library(markdown)
 library(purrr)
-# library(readr)
+library(readr)
 # library(readxl)
 # library(scales)
 # library(sf)
 library(shiny)
 library(stringr)
 # library(tibble)
+library(tidyr)
+
 downloadButton <- function(...) {
   tag <- shiny::downloadButton(...)
   tag$attribs$download <- NULL
@@ -77,10 +79,56 @@ function(input, output, session) {
     fichiers_bruts_apres_importation() %>%
       separate(nom_fichier, c("chmes_coderhj", "nom_fichier"), sep = "_", ) %>%  # Ajout du code station à partir du nom de fichier
       select(chmes_coderhj, contains("chmes_capteur"), chmes_date, chmes_heure, chmes_valeur, chmes_unite, chmes_typemesure) %>% 
-      distinct() # Dédoublonnage
+      distinct()# Dédoublonnage
   })
   
-  #### Évaluation ####
+  #### Séparation thermie/piézo ####
+  thermie <- reactive({
+    req(input$upload_fichiers)
+    fichiers_propres_apres_importation() %>%
+      filter(grepl("hermi", chmes_typemesure))
+    })
+  
+  piezo <- reactive({
+    req(input$upload_fichiers)
+    fichiers_propres_apres_importation() %>%
+      filter(!grepl("hermi", chmes_typemesure))
+    })
+
+  #### Calcul ####
+  donnees_compensees <- reactive({
+    req(input$upload_fichiers)
+    piezo() %>%
+      chronique.compensation.barometrie(modalite_rattachement = input$param_compensation_modalite_rattachement, duree_max_rattachement = input$param_compensation_duree_max_rattachement, sortie = "compensé") %>% 
+      select(-id, -chmes_validation, -chmes_mode_acquisition)
+  })
+  donnees_compensees_avec_vide <- reactive({
+    req(input$upload_fichiers)
+    piezo() %>%
+      chronique.compensation.barometrie(modalite_rattachement = input$param_compensation_modalite_rattachement, duree_max_rattachement = input$param_compensation_duree_max_rattachement, sortie = "compensé_avec_vide") %>% 
+      select(-id, -chmes_validation, -chmes_mode_acquisition)
+  })
+  donnees_compensees_tout <- reactive({
+    req(input$upload_fichiers)
+    piezo() %>%
+      chronique.compensation.barometrie(modalite_rattachement = input$param_compensation_modalite_rattachement, duree_max_rattachement = input$param_compensation_duree_max_rattachement, sortie = "tout") %>% 
+      select(-id, -chmes_validation, -chmes_mode_acquisition)
+  })
+  donnees_compensees_large <- reactive({
+    req(input$upload_fichiers)
+    piezo() %>%
+      chronique.compensation.barometrie(modalite_rattachement = input$param_compensation_modalite_rattachement, duree_max_rattachement = input$param_compensation_duree_max_rattachement, sortie = "large")
+  })
+  
+  #### Regroupement thermie/piézo ####
+  regroupement <- reactive({
+    req(input$upload_fichiers)
+    donnees_compensees_tout() %>%
+      union(thermie()) %>% 
+      arrange(chmes_coderhj, chmes_date, chmes_heure, chmes_typemesure, chmes_unite)
+  })
+  
+  #### Contexte ####
   fichiers_bruts_apres_importation_contexte <- reactive({
     req(input$upload_fichiers)
     fichiers_bruts_apres_importation() %>%
@@ -92,24 +140,71 @@ function(input, output, session) {
     fichiers_propres_apres_importation() %>%
       chronique.contexte()
   })
+    
+  donnees_compensees_contexte <- reactive({
+    req(input$upload_fichiers)
+    donnees_compensees() %>%
+      chronique.contexte()
+  })
+    
+  donnees_compensees_avec_vide_contexte <- reactive({
+    req(input$upload_fichiers)
+    donnees_compensees_avec_vide() %>%
+      chronique.contexte()
+  })
+    
+  donnees_compensees_tout_contexte <- reactive({
+    req(input$upload_fichiers)
+    donnees_compensees_tout() %>%
+      chronique.contexte()
+  })
+    
+  donnees_compensees_large_contexte <- reactive({
+    req(input$upload_fichiers)
+    donnees_compensees_large() %>%
+      chronique.contexte()
+  })
+      
+  regroupement_contexte <- reactive({
+    req(input$upload_fichiers)
+    regroupement() %>%
+      chronique.contexte()
+  })
+  
   
   #### Affichage ####
-  output$fichiers_bruts_apres_importation <- render_gt(fichiers_bruts_apres_importation() %>% filter(grepl("gouterot", nom_fichier)) %>% head())
-  output$fichiers_propres_apres_importation <- render_gt(fichiers_propres_apres_importation() %>% filter(grepl("gouterot", chmes_coderhj)) %>% head())
-  output$fichiers_propres_apres_importation_test <- render_gt(fichiers_propres_apres_importation() %>% filter(grepl("porf", chmes_coderhj)) %>% head())
-  output$files <- render_gt(fichiers_bruts_apres_importation() %>% distinct(nom_fichier))
-  output$fichiers_bruts_apres_importation_contexte <- render_gt(fichiers_bruts_apres_importation_contexte())
-  output$fichiers_propres_apres_importation_contexte <- render_gt(fichiers_propres_apres_importation_contexte())
-  
+  # output$fichiers_bruts_apres_importation <- render_gt(fichiers_bruts_apres_importation() %>% filter(grepl("gouterot", nom_fichier)) %>% head())
+  # output$fichiers_propres_apres_importation <- render_gt(fichiers_propres_apres_importation() %>% filter(grepl("gouterot", chmes_coderhj)) %>% head())
+  # output$fichiers_propres_apres_importation_test <- render_gt(fichiers_propres_apres_importation() %>% filter(grepl("porf", chmes_coderhj)) %>% head())
+  # output$files <- render_gt(fichiers_bruts_apres_importation() %>% distinct(nom_fichier))
+  # output$fichiers_bruts_apres_importation_contexte <- render_gt(fichiers_bruts_apres_importation_contexte())
+  # output$fichiers_propres_apres_importation_contexte <- render_gt(fichiers_propres_apres_importation_contexte())
+  # output$donnees_compensees_tout_contexte <- render_gt(donnees_compensees_tout_contexte())
+  output$thermie <- render_gt(thermie() %>% head())
+  output$piezo <- render_gt(piezo() %>% head())
+  output$donnees_compensees_tout <- render_gt(donnees_compensees_tout() %>% head())
+
   #### Téléchargement ####
-  output$download_data <- downloadHandler(
+  # Format long
+  output$download_data_long <- downloadHandler(
     filename = function(){
-      glue("{format(now(), format='%Y-%m-%d_%H:%M:%S')}_{fichiers_propres_apres_importation_contexte()$station}_{fichiers_propres_apres_importation_contexte()$annee}.csv") %>% str_replace_all(";", "-")
+      glue("{format(now(), format='%Y-%m-%d_%H:%M:%S')}_Regroupement_long_{fichiers_propres_apres_importation_contexte()$station}_{fichiers_propres_apres_importation_contexte()$annee}.csv") %>% str_replace_all(";", "-")
     },
     content = function(file) {
-      write_csv2(fichiers_propres_apres_importation(), file)
+      # write_csv2(fichiers_propres_apres_importation(), file)
+      write_csv2(donnees_compensees_tout(), file)
     }
   )
   
-  
+  # Format large
+  output$download_data_large <- downloadHandler(
+    filename = function(){
+      glue("{format(now(), format='%Y-%m-%d_%H:%M:%S')}_Regroupement_large_{fichiers_propres_apres_importation_contexte()$station}_{fichiers_propres_apres_importation_contexte()$annee}.csv") %>% str_replace_all(";", "-")
+    },
+    content = function(file) {
+      # write_csv2(fichiers_propres_apres_importation(), file)
+      write_csv2(donnees_compensees_large(), file)
+    }
+  )
+
 }

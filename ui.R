@@ -43,18 +43,25 @@ ui <- dashboardPage(
                        )
                 )
               ), # Fin de fluidRow
-                tableOutput("fichiers_bruts_apres_importation_contexte"),
-                tableOutput("fichiers_propres_apres_importation_contexte"),
-                tableOutput("files"),
-                tableOutput("fichiers_bruts_apres_importation"),
-                tableOutput("fichiers_propres_apres_importation"),
-                tableOutput("fichiers_propres_apres_importation_test"),
-                downloadButton("download_data", "Télécharger le résultat")
+                # tableOutput("fichiers_bruts_apres_importation_contexte"),
+                # tableOutput("fichiers_propres_apres_importation_contexte"),
+                # tableOutput("files"),
+                # tableOutput("fichiers_bruts_apres_importation"),
+                # tableOutput("fichiers_propres_apres_importation"),
+                # tableOutput("fichiers_propres_apres_importation_test"),
+                # tableOutput("donnees_compensees_tout_contexte"),
+                # tableOutput("donnees_compensees_tout_contexte"),
+                tableOutput("thermie"),
+                tableOutput("piezo"),
+                tableOutput("donnees_compensees_tout"),
+                downloadButton("download_data_long", "Télécharger le résultat - Format long"),
+                downloadButton("download_data_large", "Télécharger le résultat - Format large")
       ), # Fin de tabItem
               ## Configuration ##
       tabItem("tab_othaup_sub_configuration",
               ## Titre ##
               titlePanel("OTHAUP - Configuration"),
+              tags$h3(tagList("Format des données en entrée")),
               fluidRow(
                 column(width = 3, selectInput("param_ouverture_piezo_type", "Type de données", list("Mesures" = "Mesures"))),
                 column(width = 3, selectInput("param_ouverture_piezo_typemesure", "Type de mesures", list("Piézométrie" = "Piézométrie", "Thermie" = "Thermie"))),
@@ -67,7 +74,13 @@ ui <- dashboardPage(
                 ), # Fermeture de fluidRow
                 fluidRow(
                   column(width = 3, selectInput("param_ouverture_piezo_typedate", label = "Format de date", list("dmy_hms" = "dmy_hms", "ymd_hms" = "ymd_hms")))
-                ) # Fermeture de fluidRow
+                ), # Fermeture de fluidRow
+              tags$h3(tagList("Traitement à appliquer")),
+              tags$h4(tagList("Compensation barométrique")),
+              fluidRow(
+                column(width = 3, selectInput("param_compensation_modalite_rattachement", label = "Mode de rattachement", list("Interpolation" = "Interpolation", "Proximité" = "Proximité"))),
+                column(width = 3, numericInput("param_compensation_duree_max_rattachement", label = "Durée max de rattachement (h)", value = 4))
+              ) # Fermeture de fluidRow
               ), # Fin de tabItem              ## Notice ##
               tabItem("tab_othaup_sub_notice",
                 titlePanel("OTHAUP - Notice d'utilisation"),
@@ -83,7 +96,7 @@ ui <- dashboardPage(
     fluidRow( # à rétablir mais fait planter l'application sans que je ne sache pourquoi
       column(
         width = 12,
-        h5(tagList("Version 0.0.6 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
+        h5(tagList("Version 0.0.7 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
 
       ) # Fermeture de column
     ) # Fermeture de fluidRow
