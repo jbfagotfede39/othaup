@@ -1,4 +1,8 @@
 
+### 0.0.8 - 2025-02-20
+- Correction de l'export complet, qui n'incluait pas la thermie
+- Ajout de la licence en bas de page (close #11)
+
 ### 0.0.7 - 2025-02-20
 - Ajout des boutons de réglage de la compensation barométrique
 - Implémentation du calcul de compensation

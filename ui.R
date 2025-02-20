@@ -13,6 +13,7 @@ library(tibble)
 
 #### Éléments à afficher ####
 url_mail_perso <- a("Jean-Baptiste Fagot", href="mailto:jean-baptiste.fagot@peche-jura.com")
+url_licence <- a("GNU GPL v3", href="https://choosealicense.com/licenses/gpl-3.0/")
 
 # Define UI for application that draws a histogram
 ui <- dashboardPage(
@@ -96,7 +97,8 @@ ui <- dashboardPage(
     fluidRow( # à rétablir mais fait planter l'application sans que je ne sache pourquoi
       column(
         width = 12,
-        h5(tagList("Version 0.0.7 de l'application, déployée le 18/02/2025 par ", url_mail_perso))
+        # h5(tagList("Version 0.0.7 de l'application, déployée le 18/02/2025 par ", url_mail_perso, "sous licence GNU GPL v3"))
+        h5(tagList("Version 0.0.7 de l'application, déployée le 18/02/2025 par ", url_mail_perso, "sous licence ", url_licence))
 
       ) # Fermeture de column
     ) # Fermeture de fluidRow

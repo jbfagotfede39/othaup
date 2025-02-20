@@ -192,7 +192,7 @@ function(input, output, session) {
     },
     content = function(file) {
       # write_csv2(fichiers_propres_apres_importation(), file)
-      write_csv2(donnees_compensees_tout(), file)
+      write_csv2(regroupement(), file)
     }
   )
   
