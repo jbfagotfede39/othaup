@@ -1,32 +1,21 @@
-#
-# This is the server logic of a Shiny web application. You can run the
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
 
-# library(aquatools)
+library(aquatools)
 library(DBI)
 library(dplyr)
-# library(ggplot2)
+library(ggplot2)
 library(glue)
 library(fs)
-# library(gt)
-# library(gtsummary)
-# library(hms)
+library(gt)
+library(gtsummary)
 library(lubridate)
 library(magrittr)
 library(markdown)
 library(purrr)
 library(readr)
-# library(readxl)
-# library(scales)
-# library(sf)
+library(readxl)
+library(scales)
 library(shiny)
 library(stringr)
-# library(tibble)
 library(tidyr)
 
 downloadButton <- function(...) {
@@ -191,7 +180,6 @@ function(input, output, session) {
       glue("{format(now(), format='%Y-%m-%d_%H:%M:%S')}_Regroupement_long_{fichiers_propres_apres_importation_contexte()$station}_{fichiers_propres_apres_importation_contexte()$annee}.csv") %>% str_replace_all(";", "-")
     },
     content = function(file) {
-      # write_csv2(fichiers_propres_apres_importation(), file)
       write_csv2(regroupement(), file)
     }
   )
@@ -202,7 +190,6 @@ function(input, output, session) {
       glue("{format(now(), format='%Y-%m-%d_%H:%M:%S')}_Regroupement_large_{fichiers_propres_apres_importation_contexte()$station}_{fichiers_propres_apres_importation_contexte()$annee}.csv") %>% str_replace_all(";", "-")
     },
     content = function(file) {
-      # write_csv2(fichiers_propres_apres_importation(), file)
       write_csv2(donnees_compensees_large(), file)
     }
   )

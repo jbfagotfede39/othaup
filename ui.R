@@ -1,5 +1,3 @@
-# Application Shiny Anki
-
 library(aquatools)
 library(afd39)
 library(dplyr)
@@ -94,11 +92,10 @@ ui <- dashboardPage(
       ), # fin de tabItems
       
     # Bas de page de tous les tabItems
-    fluidRow( # à rétablir mais fait planter l'application sans que je ne sache pourquoi
+    fluidRow(
       column(
         width = 12,
-        # h5(tagList("Version 0.0.7 de l'application, déployée le 18/02/2025 par ", url_mail_perso, "sous licence GNU GPL v3"))
-        h5(tagList("Version 0.0.7 de l'application, déployée le 18/02/2025 par ", url_mail_perso, "sous licence ", url_licence))
+        h5(tagList("Version 0.0.9 de l'application, déployée le 18/02/2025 par ", url_mail_perso, "sous licence ", url_licence))
 
       ) # Fermeture de column
     ) # Fermeture de fluidRow

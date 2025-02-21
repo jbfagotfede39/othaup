@@ -1,3 +1,5 @@
+### 0.0.9 - 2025-02-21
+- Ajout d'un `README` (close #1)
 
 ### 0.0.8 - 2025-02-20
 - Correction de l'export complet, qui n'incluait pas la thermie
