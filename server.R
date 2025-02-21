@@ -2,6 +2,7 @@
 library(aquatools)
 library(DBI)
 library(dplyr)
+library(DT)
 library(ggplot2)
 library(glue)
 library(fs)
@@ -162,16 +163,74 @@ function(input, output, session) {
   
   
   #### Affichage ####
-  # output$fichiers_bruts_apres_importation <- render_gt(fichiers_bruts_apres_importation() %>% filter(grepl("gouterot", nom_fichier)) %>% head())
-  # output$fichiers_propres_apres_importation <- render_gt(fichiers_propres_apres_importation() %>% filter(grepl("gouterot", chmes_coderhj)) %>% head())
-  # output$fichiers_propres_apres_importation_test <- render_gt(fichiers_propres_apres_importation() %>% filter(grepl("porf", chmes_coderhj)) %>% head())
-  # output$files <- render_gt(fichiers_bruts_apres_importation() %>% distinct(nom_fichier))
-  # output$fichiers_bruts_apres_importation_contexte <- render_gt(fichiers_bruts_apres_importation_contexte())
-  # output$fichiers_propres_apres_importation_contexte <- render_gt(fichiers_propres_apres_importation_contexte())
-  # output$donnees_compensees_tout_contexte <- render_gt(donnees_compensees_tout_contexte())
-  output$thermie <- render_gt(thermie() %>% head())
-  output$piezo <- render_gt(piezo() %>% head())
-  output$donnees_compensees_tout <- render_gt(donnees_compensees_tout() %>% head())
+  ##### Infobox #####
+  n_mesures_apres_importation <- reactive({
+    req(input$upload_fichiers)
+    
+    fichiers_bruts_apres_importation_contexte() %>%
+      select(nmesure) %>% 
+      pull()
+  })
+  
+  output$infobox_n_mesures_apres_importation <- renderInfoBox({
+    req(input$upload_fichiers)
+    
+    infoBox(
+      "Mesures brutes", n_mesures_apres_importation(), icon = icon("book-open"),
+      color = "orange"
+    )
+  })
+  
+    n_mesures_apres_dedoublonnage <- reactive({
+    req(input$upload_fichiers)
+    
+    fichiers_propres_apres_importation_contexte() %>%
+      select(nmesure) %>% 
+      pull()
+  })
+  
+  output$infobox_n_mesures_apres_dedoublonnage <- renderInfoBox({
+    req(input$upload_fichiers)
+    
+    infoBox(
+      "Mesures \n dédoublonnées", n_mesures_apres_dedoublonnage(), icon = icon("clock"),
+      color = "green"
+    )
+  })
+  
+  ##### Extrait des données #####
+  output$titre_table_avant_compensation <- renderUI({
+    req(input$upload_fichiers)
+    
+    tags$h3(tagList("Données brutes après dédoublonnage"))
+  })
+  
+  output$table_avant_compensation <- 
+    DT::renderDataTable(DT::datatable({
+      fichiers_propres_apres_importation()
+    }))
+
+  output$titre_table_apres_compensation <- renderUI({
+    req(input$upload_fichiers)
+    
+    tags$h3(tagList("Données compensées"))
+  })
+  
+  output$table_apres_compensation <- 
+    DT::renderDataTable(DT::datatable({
+      donnees_compensees_tout()
+    }))
+
+  output$titre_table_donnees_synchronisees <- renderUI({
+    req(input$upload_fichiers)
+    
+    tags$h3(tagList("Vue synchronisée des données"))
+  })
+  
+  output$table_donnees_synchronisees <- 
+    DT::renderDataTable(DT::datatable({
+      donnees_compensees_large()
+    }))
 
   #### Téléchargement ####
   # Format long

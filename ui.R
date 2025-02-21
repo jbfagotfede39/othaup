@@ -42,17 +42,16 @@ ui <- dashboardPage(
                        )
                 )
               ), # Fin de fluidRow
-                # tableOutput("fichiers_bruts_apres_importation_contexte"),
-                # tableOutput("fichiers_propres_apres_importation_contexte"),
-                # tableOutput("files"),
-                # tableOutput("fichiers_bruts_apres_importation"),
-                # tableOutput("fichiers_propres_apres_importation"),
-                # tableOutput("fichiers_propres_apres_importation_test"),
-                # tableOutput("donnees_compensees_tout_contexte"),
-                # tableOutput("donnees_compensees_tout_contexte"),
-                tableOutput("thermie"),
-                tableOutput("piezo"),
-                tableOutput("donnees_compensees_tout"),
+              fluidRow(
+                infoBoxOutput("infobox_n_mesures_apres_importation", width = 4),
+                infoBoxOutput("infobox_n_mesures_apres_dedoublonnage", width = 4)
+              ),
+                uiOutput("titre_table_avant_compensation"),
+                DT::dataTableOutput("table_avant_compensation"),
+                uiOutput("titre_table_apres_compensation"),
+                DT::dataTableOutput("table_apres_compensation"),
+                uiOutput("titre_table_donnees_synchronisees"),
+                DT::dataTableOutput("table_donnees_synchronisees"),
                 downloadButton("download_data_long", "Télécharger le résultat - Format long"),
                 downloadButton("download_data_large", "Télécharger le résultat - Format large")
       ), # Fin de tabItem
@@ -95,7 +94,7 @@ ui <- dashboardPage(
     fluidRow(
       column(
         width = 12,
-        h5(tagList("Version 0.0.10 de l'application, déployée le 21/02/2025 par ", url_mail_perso, "sous licence ", url_licence))
+        h5(tagList("Version 0.1.0 de l'application, déployée le 21/02/2025 par ", url_mail_perso, "sous licence ", url_licence))
 
       ) # Fermeture de column
     ) # Fermeture de fluidRow

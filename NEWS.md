@@ -1,3 +1,8 @@
+### 0.1.0 - 2025-02-21
+- Preuve de concept fonctionnelle
+- Ajout de deux infobox d'exemple (close #16)
+- Ajout de trois vues des données à des stades différents (dédoublonnées, compensées en format long et compensées en format large)
+
 ### 0.0.9 - 2025-02-21
 - Ajout d'un `README` (close #1)
 
